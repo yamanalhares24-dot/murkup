@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.tailwindcss.com" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="assets/index.css"> -->
+    <title>All Products - Product Store</title>
+</head>
+
+<body>
+    <header class="bg-white dark:bg-gray-900">
+        <section class="bg-white dark:bg-gray-900">
+            <nav x-data="{ isOpen: false }" class="container p-6 mx-auto lg:flex lg:justify-between lg:items-center">
+                <div class="flex items-center justify-between">
+                    <a href="index.html">
+                        <img class="w-auto h-6 sm:h-7" src="https://merakiui.com/images/full-logo.svg" alt="">
+                    </a>
+
+                    <div class="flex lg:hidden">
+                        <button x-cloak @click="isOpen = !isOpen" type="button"
+                            class="text-gray-500 dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-400 focus:outline-none focus:text-gray-600 dark:focus:text-gray-400"
+                            aria-label="toggle menu">
+                            <svg x-show="!isOpen" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 8h16M4 16h16" />
+                            </svg>
+
+                            <svg x-show="isOpen" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div x-cloak :class="[isOpen ? 'translate-x-0 opacity-100 ' : 'opacity-0 -translate-x-full']"
+                    class="absolute inset-x-0 z-20 w-full px-6 py-4 transition-all duration-300 ease-in-out bg-white shadow-md lg:bg-transparent lg:dark:bg-transparent lg:shadow-none dark:bg-gray-900 lg:mt-0 lg:p-0 lg:top-0 lg:relative lg:w-auto lg:opacity-100 lg:translate-x-0 lg:flex lg:items-center">
+                    <div class="flex flex-col space-y-4 lg:mt-0 lg:flex-row lg:space-y-0">
+                        <a class="text-gray-700 lg:mx-6 dark:text-gray-200 dark:hover:text-blue-400 hover:text-blue-500"
+                            href="index.html">Home</a>
+                        <a class="text-gray-700 lg:mx-6 dark:text-gray-200 dark:hover:text-blue-400 hover:text-blue-500"
+                            href="products.html">Products</a>
+                        <a class="text-gray-700 lg:mx-6 dark:text-gray-200 dark:hover:text-blue-400 hover:text-blue-500"
+                            href="#">Pricing</a>
+                        <a class="text-gray-700 lg:mx-6 dark:text-gray-200 dark:hover:text-blue-400 hover:text-blue-500"
+                            href="#">Contact</a>
+                        <a class="text-gray-700 lg:mx-6 dark:text-gray-200 dark:hover:text-blue-400 hover:text-blue-500"
+                            href="#">FAQ</a>
+                    </div>
+
+                     <div class="relative">
+    <button class="text-gray-700 hover:text-blue-600">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+           viewBox="0 0 24 24" class="w-10 h-10">
+        <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.16 14h9.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49a1 1 0 0 0-.88-1.48H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.44C4.52 16.37 5.48 18 7 18h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.96-1.73z"/>
+      </svg>
+    </button>
+
+    <span id="cart-count"
+          class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+      0
+    </span>
+  </div>
+
+
+                </div>
+            </nav>
+        </section>
+    </header>
+
+    <main class="container mx-auto py-10">
+        <section class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 dark:text-white mb-4">All Products</h1>
+            <p class="text-gray-600 dark:text-gray-300">Browse our complete collection</p>
+        </section>
+
+        <!-- Filters -->
+        <section class="container mx-auto mt-10 text-center mb-8">
+            <div class="flex flex-wrap justify-center gap-4 items-center">
+                <input id="priceFilter" type="number" placeholder="Max Price"
+                    class="border p-2 rounded-md w-40 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button id="filterBtn"
+                    class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">Filter by Price</button>
+                <select id="categorySelect" class="border p-2 rounded-md w-48 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="all">All Categories</option>
+                </select>
+            </div>
+        </section>
+
+        <div id="productContainer"
+            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-8"></div>
+        
+        <!-- Pagination -->
+        <div id="pagination" class="flex justify-center items-center mt-8 space-x-2">
+            <button id="prevBtn" class="px-4 py-2 bg-gray-200 text-gray-600 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                Previous
+            </button>
+            <div id="pageNumbers" class="flex space-x-1"></div>
+            <button id="nextBtn" class="px-4 py-2 bg-gray-200 text-gray-600 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                Next
+            </button>
+        </div>
+    </main>
+
+     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="assets/index.js"></script>
+</body>
+
+</html>

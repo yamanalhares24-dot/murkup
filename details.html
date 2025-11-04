@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex justify-center items-center p-8">
+
+  <div id="details" class="max-w-md w-full bg-white rounded-lg shadow-lg p-6 text-center"></div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id');
+    const container = document.getElementById('details');
+
+    if (!productId) {
+      container.innerHTML = '<p class="text-gray-700">No product selected.</p>';
+    } else {
+      fetch(`https://dummyjson.com/products/${productId}`)
+        .then(res => res.json())
+        .then(product => {
+          container.innerHTML = `
+            <img class="object-cover w-full h-64 mb-4 rounded-lg" src="${product.thumbnail}" alt="${product.title}">
+            <h1 class="text-2xl font-bold mb-2">${product.title}</h1>
+            <p class="text-gray-600 mb-2 capitalize">${product.category}</p>
+            <p class="text-gray-700 mb-4">${product.description}</p>
+            <p class="text-lg font-semibold text-blue-600 mb-6">$${product.price}</p>
+            <a href="index.html" class="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-900">⬅ Back to List</a>
+          `;
+        })
+        .catch(() => {
+          container.innerHTML = '<p class="text-gray-700">Product not found.</p>';
+        });
+    }
+  </script>
+
+</body>
+</html>
