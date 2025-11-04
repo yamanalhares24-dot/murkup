@@ -91,38 +91,85 @@ function renderPagination() {
   const prevBtn = document.getElementById('prevBtn');
   const nextBtn = document.getElementById('nextBtn');
 
+  if (totalPages <= 1) {
+    document.getElementById('pagination').style.display = 'none';
+    return;
+  }
+  
+  document.getElementById('pagination').style.display = 'flex';
   pageNumbers.innerHTML = '';
 
-  for (let i = 1; i <= totalPages; i++) {
+  const isMobile = window.innerWidth < 640;
+  const maxVisiblePages = isMobile ? 3 : 5;
+  
+  let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+  let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+  
+  if (endPage - startPage + 1 < maxVisiblePages) {
+    startPage = Math.max(1, endPage - maxVisiblePages + 1);
+  }
+
+  if (startPage > 1) {
+    const firstBtn = document.createElement('button');
+    firstBtn.className = 'px-2 sm:px-3 py-2 text-xs sm:text-sm rounded bg-gray-200 text-gray-600 hover:bg-gray-300';
+    firstBtn.textContent = '1';
+    firstBtn.onclick = () => goToPage(1);
+    pageNumbers.appendChild(firstBtn);
+    
+    if (startPage > 2) {
+      const dots = document.createElement('span');
+      dots.className = 'px-2 py-2 text-gray-500';
+      dots.textContent = '...';
+      pageNumbers.appendChild(dots);
+    }
+  }
+
+  for (let i = startPage; i <= endPage; i++) {
     const pageBtn = document.createElement('button');
-    pageBtn.className = `px-3 py-2 rounded ${i === currentPage ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'}`;
+    pageBtn.className = `px-2 sm:px-3 py-2 text-xs sm:text-sm rounded ${
+      i === currentPage 
+        ? 'bg-blue-600 text-white' 
+        : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+    }`;
     pageBtn.textContent = i;
-    pageBtn.addEventListener('click', () => {
-      currentPage = i;
-      displayCurrentPage();
-      renderPagination();
-    });
+    pageBtn.onclick = () => goToPage(i);
     pageNumbers.appendChild(pageBtn);
+  }
+
+  if (endPage < totalPages) {
+    if (endPage < totalPages - 1) {
+      const dots = document.createElement('span');
+      dots.className = 'px-2 py-2 text-gray-500';
+      dots.textContent = '...';
+      pageNumbers.appendChild(dots);
+    }
+    
+    const lastBtn = document.createElement('button');
+    lastBtn.className = 'px-2 sm:px-3 py-2 text-xs sm:text-sm rounded bg-gray-200 text-gray-600 hover:bg-gray-300';
+    lastBtn.textContent = totalPages;
+    lastBtn.onclick = () => goToPage(totalPages);
+    pageNumbers.appendChild(lastBtn);
   }
 
   prevBtn.disabled = currentPage === 1;
   nextBtn.disabled = currentPage === totalPages;
+  prevBtn.className = `px-3 sm:px-4 py-2 text-xs sm:text-sm bg-gray-200 text-gray-600 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed`;
+  nextBtn.className = `px-3 sm:px-4 py-2 text-xs sm:text-sm bg-gray-200 text-gray-600 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed`;
 
   prevBtn.onclick = () => {
-    if (currentPage > 1) {
-      currentPage--;
-      displayCurrentPage();
-      renderPagination();
-    }
+    if (currentPage > 1) goToPage(currentPage - 1);
   };
 
   nextBtn.onclick = () => {
-    if (currentPage < totalPages) {
-      currentPage++;
-      displayCurrentPage();
-      renderPagination();
-    }
+    if (currentPage < totalPages) goToPage(currentPage + 1);
   };
+}
+
+function goToPage(page) {
+  currentPage = page;
+  displayCurrentPage();
+  renderPagination();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 window.addToCart = function(productId) {
@@ -155,3 +202,25 @@ function updateCartCount() {
 setTimeout(updateCartCount, 100);
 setTimeout(updateCartCount, 500);
 setTimeout(updateCartCount, 1000);
+
+window.addEventListener('resize', () => {
+  if (currentProducts.length > 0) {
+    renderPagination();
+  }
+});
+
+// Mobile menu toggle
+document.addEventListener('DOMContentLoaded', () => {
+  const menuToggle = document.getElementById('menuToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const menuIcon = document.getElementById('menuIcon');
+  const closeIcon = document.getElementById('closeIcon');
+
+  if (menuToggle && mobileMenu) {
+    menuToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+      menuIcon.classList.toggle('hidden');
+      closeIcon.classList.toggle('hidden');
+    });
+  }
+});

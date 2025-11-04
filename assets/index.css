@@ -7,3 +7,46 @@ header {
         padding-top: 0rem !important;
     }
 }
+
+
+#pagination {
+    margin: 2rem 0;
+}
+
+#pagination button {
+    transition: all 0.2s ease;
+    min-width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#pagination button:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 640px) {
+    #pagination {
+        margin: 1.5rem 0;
+        padding: 0 1rem;
+    }
+
+    #pagination button {
+        min-width: 32px;
+        height: 32px;
+        font-size: 0.75rem;
+    }
+
+    #pageNumbers {
+        max-width: 200px;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    #pageNumbers::-webkit-scrollbar {
+        display: none;
+    }
+}
